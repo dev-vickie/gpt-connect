@@ -11,10 +11,11 @@ const configuration = new Configuration({ apiKey: process.env.OPEN_AI_KEY });
 const openai = new OpenAIApi(configuration);
 
 app.post("/find-complexity", async (req, res) => {
+  const { request } = req.body;
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `The largest mountain in the world is`,
+      prompt: `${request}`,
       max_tokens: 64,
       temperature: 0,
       presence_penalty: 0.0,
@@ -27,8 +28,7 @@ app.post("/find-complexity", async (req, res) => {
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.response ? error.response.data 
-      : "Some error occured",
+      error: error.response ? error.response.data : "Some error occured",
     });
   }
 });
